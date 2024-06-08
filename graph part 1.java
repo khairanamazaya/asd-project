@@ -1,78 +1,100 @@
- import java.util.*;
-
-
- // Compiler version JDK 11.0.2
+import java.util.*;
 
 public class GraphPresent{
-  String [][] adjacencyMatrix;
-  String [][] cek;
+ String [][] adjacencyMatrix;
+ int size;
   
   public GraphPresent(int n){
-    adjacencyMatrix = new int [n][n];
+  adjacencyMatrix = new int [n][n];
+  size = n;
   }
-  
-  // public void addEdge(int src, int dest){
-  //   adjacencyMatrix[src][dest] ;
-  //   adjacencyMatrix[dest][src] ;
-  // }
-
 
   public static void main(String[]args){
-    Bolean cekNama ;
-    Scanner sc = new Scannner(System.in);
-    int m = sc.nextInt();
-    int n = sc.nextInt();
-    sc.nextLine;
+      Scanner sc = new Scanner(System.in);
+        int m,n;
+        do{
+            m = sc.nextInt(); 
+            if(m <= 1 || m > 300){
+                System.out.println("harus lebih dari 1 atau kurang dari samadengan 300");
+            }
+        }while(m <= 1 || m > 300);
+        do{
+            n = sc.nextInt(); 
+            if(n <= 1 || n > 200){
+                System.out.println("harus lebih dari 1 atau kurang dari samadengan 200");
+            }
+        }while(n <= 1 || n > 200);  
+          
+        sc.nextLine();
+   
     GraphPresent graph = new GraphPresent(m);
-    GraphPresent graphCek = new GraphPresent(m);
-     for(int i = 0; i < n; i++){
-        String[] hubungan = sc.nextLine().split(" ");
-        String src = hubungan[0];
-        String dest = hubungan[2];
-        for(int j = 0; j < m; j++){
-            if(src == adjacencyMatrix[0][j]){
-               cekNama = true;
+
+   String[] names = new String[m];
+        int index = 0;
+
+        for (int i = 0; i < n; i++) {
+            String[] hubungan = sc.nextLine().split(" ");
+            String src = hubungan[0];
+            String dest = hubungan[2];
+
+            if (!contains(names, src)) {
+                names[index++] = src;
             }
-            else if(dest == adjacencyMatrix[0][j]){
-              cekNama = true;
+
+            if (!contains(names, dest)) {
+                names[index++] = dest;
             }
-            else{
-              cekNama = false; 
+
+            int srcIndex = getIndex(names, src);
+            int destIndex = getIndex(names, dest);
+
+            graph.adjacencyMatrix[srcIndex][destIndex] = dest;
+            graph.adjacencyMatrix[destIndex][srcIndex] = src; 
+        }
+        boolean[] visited = new boolean[m];
+        int familyCount = 0;
+   
+          for (int i = 0; i < m; i++) {
+            if (!visited[i] && names[i] != null) {
+                dfsIterative(graph.adjacencyMatrix, visited, i, m);
+                familyCount++;
             }
         }
-     }
-    
-  }
-  // graph.addEdge(0,2);
-    // graph.addEdge(1,2);
-    // graph.addEdge(3,1);
-    // graph.addEdge(3,4);
-    // graph.addEdge(4,0);
-    
-    // graph.printGraph();
-  
-  // public void deleteEdge(int src, int dest){
-  //   adjacencyMatrix[src][dest] = 0;
-  //   adjacencyMatrix[dest][src] = 0;
-  // }
-  // public void printGraph(){
-  //   System.out.println("adjacency Matrix;");
-  //   System.out.print(" ");
-    
-  //   for (int i = 0; i < v; i++){
-  //     System.out.printf(" %c", 65 + i);
-  //   }
-    
-  //   System.out.println(" ");
-    
-  //   for (int i = 0; i < v; i++){
-  //     System.out.printf("%c ", 65 + i);
-  //     for (int j = 0; j < v; j++){
-  //       System.out.print(adjacencyMatrix[i][j] + " ");
-  //     }
-  //     System.out.println("");
-  //   }
-  // }
-  
-  
+
+        System.out.println(familyCount);
+    }
+
+ public static void dfsIterative(String[][] matrix, boolean[] visited, int start, int size) {
+        Stack<Integer> stack = new Stack<>();
+        stack.push(start);
+        visited[start] = true;
+
+        while (!stack.isEmpty()) {
+            int v = stack.pop();
+            for (int i = 0; i < size; i++) {
+                if (matrix[v][i] != null && !visited[i]) {
+                    visited[i] = true;
+                    stack.push(i);
+                }
+            }
+        }
+    }
+
+    public static boolean contains(String[] array, String value) {
+        for (String s : array) {
+            if (s != null && s.equals(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int getIndex(String[] array, String value) {
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] != null && array[i].equals(value)) {
+                return i;
+            }
+        }
+        return -1; 
+    }
 }

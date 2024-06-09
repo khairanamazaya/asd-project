@@ -5,7 +5,7 @@ public class GraphPresent{
  int size;
   
   public GraphPresent(int n){
-  adjacencyMatrix = new int [n][n];
+  adjacencyMatrix = new String [n][n];
   size = n;
   }
 

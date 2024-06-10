@@ -2,11 +2,9 @@ import java.util.*;
 
 public class GraphPresent{
  String [][] adjacencyMatrix;
- int size;
   
   public GraphPresent(int n){
   adjacencyMatrix = new String [n][n];
-  size = n;
   }
 
   public static void main(String[]args){
